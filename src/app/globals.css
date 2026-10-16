@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/*
+ * Bmesino design tokens.
+ * Palette refined from the approved logo (navy wordmark, blue → cyan globe).
+ */
+@theme {
+  --color-navy-950: #04163a;
+  --color-navy-900: #082b63;
+  --color-navy-800: #0c3878;
+  --color-navy-700: #12478f;
+  --color-brand-700: #0649a0;
+  --color-brand-600: #0757b8;
+  --color-brand-500: #1a6fd6;
+  --color-cyan-400: #3cb9f7;
+  --color-cyan-500: #13a8f5;
+  --color-cyan-600: #0a8fd4;
+
+  --color-ink: #142338;
+  --color-ink-soft: #2b3b52;
+  --color-muted: #586880;
+  --color-subtle: #8090a6;
+  --color-line: #dbe3ee;
+  --color-line-strong: #c3cfdf;
+  --color-surface: #f4f7fb;
+  --color-surface-2: #eaf0f7;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Uppercase, widely tracked labels — echoes the logo tagline "GLOBAL SOURCING & TRADE SOLUTIONS". */
+  --font-label: var(--font-montserrat), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 0.625rem;
+
+  --shadow-soft: 0 1px 2px rgb(8 43 99 / 0.04), 0 4px 16px -4px rgb(8 43 99 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(8 43 99 / 0.05), 0 18px 40px -16px rgb(8 43 99 / 0.22);
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-fade-up: fade-up 0.7s var(--ease-out-quart) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@keyframes route {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+/* Hero slider: autoplay timer bar; the slide advances on animationend. */
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@utility hero-progress {
+  animation: hero-progress var(--hero-slide-duration, 7s) linear forwards;
+}
+
+@layer base {
+  :root {
+    --header-h: 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 4.75rem;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-500);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--color-cyan-500);
+    color: white;
+  }
+}
+
+@layer components {
+  /* Thin technical grid used behind selected sections (blueprint / report feel). */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(8 43 99 / 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(8 43 99 / 0.055) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .bg-grid-dark {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+ * Scroll reveal without JavaScript. Content is always visible where
+ * scroll-driven animations are unsupported or reduced motion is requested.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+
+  .animate-in {
+    animation: var(--animate-fade-up);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
