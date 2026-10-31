@@ -20,8 +20,8 @@ import { QuoteForm, QuoteFormFromParams } from "@/components/forms/quote-form";
 import { ButtonLink } from "@/components/ui/button";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { WhatsAppIcon } from "@/components/ui/icons";
-import { contactConfig, markets, siteConfig } from "@/config/site";
-import { mailtoUrl, telUrl, whatsappMessageFor, whatsappUrl } from "@/lib/contact-links";
+import { contactConfig, markets, offices, siteConfig } from "@/config/site";
+import { mailtoUrl, telUrl, whatsappMessageFor, whatsappUrl, whatsappUrlFor } from "@/lib/contact-links";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = pageMetadata({
@@ -67,17 +67,6 @@ export default function AboutContactPage() {
       label: "E-mail",
       value: contactConfig.email,
       href: mailtoUrl("Demande d'information — BME SINO TRADE"),
-    },
-    contactConfig.phone && {
-      icon: <Phone aria-hidden className="size-5" />,
-      label: "Téléphone",
-      value: contactConfig.phone,
-      href: telUrl(),
-    },
-    contactConfig.address && {
-      icon: <MapPin aria-hidden className="size-5" />,
-      label: "Adresse",
-      value: contactConfig.address,
     },
   ].filter((channel): channel is Exclude<typeof channel, undefined | ""> => Boolean(channel));
 
@@ -222,6 +211,44 @@ export default function AboutContactPage() {
                 </ul>
               </div>
             )}
+
+            <div className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+              <h2 className="font-label text-[0.7rem] font-medium uppercase tracking-[0.16em] text-brand-600">Nos bureaux</h2>
+              <ul className="mt-4 divide-y divide-line">
+                {offices.map((office) => (
+                  <li key={office.code} className="py-4 first:pt-0 last:pb-0">
+                    <p className="font-semibold text-navy-900">
+                      {office.name} <span className="text-sm font-normal text-muted">· {office.role}</span>
+                    </p>
+                    {"address" in office && (
+                      <p className="mt-2 flex items-start gap-2.5 text-sm leading-relaxed text-muted">
+                        <MapPin aria-hidden className="mt-0.5 size-4 shrink-0 text-brand-600" />
+                        {office.address}
+                      </p>
+                    )}
+                    <div className="mt-2 space-y-1 text-sm">
+                      {office.phone && (
+                        <a href={telUrl(office.phone)} className="flex items-center gap-2.5 text-navy-900 hover:text-brand-600">
+                          <Phone aria-hidden className="size-4 shrink-0 text-brand-600" />
+                          {office.phone}
+                        </a>
+                      )}
+                      {"whatsapp" in office && (
+                        <a
+                          href={whatsappUrlFor(office.whatsapp, whatsappMessageFor("une demande de devis"))}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2.5 text-navy-900 hover:text-brand-600"
+                        >
+                          <WhatsAppIcon className="size-4 shrink-0 text-brand-600" />
+                          {office.whatsapp}
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="rounded-[var(--radius-card)] bg-navy-900 p-6 text-white">
               <h2 className="font-label text-[0.7rem] font-medium uppercase tracking-[0.16em] text-cyan-400">Après votre envoi</h2>

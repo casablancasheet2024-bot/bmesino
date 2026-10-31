@@ -7,7 +7,7 @@ import { QualityControlHighlight } from "@/components/home/quality-control";
 import { GlobalMarkets } from "@/components/home/global-markets";
 import { QuoteCTA } from "@/components/sections/quote-cta";
 import { JsonLd } from "@/components/ui/json-ld";
-import { absoluteUrl, contactConfig, siteConfig } from "@/config/site";
+import { absoluteUrl, contactConfig, offices, siteConfig } from "@/config/site";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default function HomePage() {
           alternateName: siteConfig.name,
           slogan: siteConfig.slogan,
           description: siteConfig.description,
-          address: { "@type": "PostalAddress", addressCountry: "MA" },
+          address: { "@type": "PostalAddress", streetAddress: offices[0].address, addressLocality: "Casablanca", addressCountry: "MA" },
           areaServed: ["Maroc", "Afrique", "Europe", "États-Unis", "Canada"],
           ...(url ? { url, logo: absoluteUrl(siteConfig.logo.src) } : {}),
           ...(contactConfig.email ? { email: contactConfig.email } : {}),

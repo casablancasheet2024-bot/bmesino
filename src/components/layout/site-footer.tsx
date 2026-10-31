@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { Link } from "@/i18n/link";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { contactConfig, markets, siteConfig } from "@/config/site";
+import { contactConfig, markets, offices, siteConfig } from "@/config/site";
 import { legalLinks, primaryNav, serviceLinks } from "@/config/navigation";
 import { categories } from "@/data/categories";
 import { Container } from "@/components/ui/layout";
 import { WhatsAppIcon } from "@/components/ui/icons";
-import { mailtoUrl, telUrl, whatsappUrl } from "@/lib/contact-links";
+import { mailtoUrl, telUrl, whatsappUrlFor } from "@/lib/contact-links";
 import { CopyrightYear } from "./copyright-year";
 
 function FooterHeading({ children }: { children: string }) {
@@ -16,10 +16,7 @@ function FooterHeading({ children }: { children: string }) {
 const linkClass = "text-[0.9rem] text-white/70 transition-colors hover:text-white";
 
 export function SiteFooter() {
-  const whatsapp = whatsappUrl();
   const email = mailtoUrl();
-  const tel = telUrl();
-  const hasContact = Boolean(whatsapp || email || tel || contactConfig.address);
 
   return (
     <footer className="relative overflow-hidden bg-navy-950 text-white">
@@ -49,40 +46,51 @@ export function SiteFooter() {
               fournisseurs, contrôle qualité, rapports QC et coordination logistique vers vos marchés.
             </p>
 
-            {hasContact && (
-              <ul className="mt-6 space-y-2.5 text-[0.9rem]">
-                {contactConfig.address && (
-                  <li className="flex items-start gap-2.5 text-white/70">
-                    <MapPin aria-hidden className="mt-0.5 size-4 shrink-0 text-cyan-400" />
-                    {contactConfig.address}
-                  </li>
-                )}
-                {email && (
-                  <li>
-                    <a href={email} className={`flex items-center gap-2.5 ${linkClass}`}>
-                      <Mail aria-hidden className="size-4 shrink-0 text-cyan-400" />
-                      {contactConfig.email}
-                    </a>
-                  </li>
-                )}
-                {tel && (
-                  <li>
-                    <a href={tel} className={`flex items-center gap-2.5 ${linkClass}`}>
-                      <Phone aria-hidden className="size-4 shrink-0 text-cyan-400" />
-                      {contactConfig.phone}
-                    </a>
-                  </li>
-                )}
-                {whatsapp && (
-                  <li>
-                    <a href={whatsapp} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2.5 ${linkClass}`}>
-                      <WhatsAppIcon className="size-4 shrink-0 text-cyan-400" />
-                      WhatsApp
-                    </a>
-                  </li>
-                )}
-              </ul>
+            {email && (
+              <a href={email} className={`mt-6 flex items-center gap-2.5 ${linkClass}`}>
+                <Mail aria-hidden className="size-4 shrink-0 text-cyan-400" />
+                {contactConfig.email}
+              </a>
             )}
+
+            <ul className="mt-6 space-y-5 text-[0.9rem]">
+              {offices.map((office) => (
+                <li key={office.code}>
+                  <p className="font-label text-[0.7rem] uppercase tracking-[0.16em] text-cyan-400">
+                    {office.name} · {office.role}
+                  </p>
+                  <ul className="mt-2 space-y-1.5">
+                    {"address" in office && (
+                      <li className="flex items-start gap-2.5 text-white/70">
+                        <MapPin aria-hidden className="mt-0.5 size-4 shrink-0 text-cyan-400" />
+                        {office.address}
+                      </li>
+                    )}
+                    {office.phone && (
+                      <li>
+                        <a href={telUrl(office.phone)} className={`flex items-center gap-2.5 ${linkClass}`}>
+                          <Phone aria-hidden className="size-4 shrink-0 text-cyan-400" />
+                          {office.phone}
+                        </a>
+                      </li>
+                    )}
+                    {"whatsapp" in office && (
+                      <li>
+                        <a
+                          href={whatsappUrlFor(office.whatsapp)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center gap-2.5 ${linkClass}`}
+                        >
+                          <WhatsAppIcon className="size-4 shrink-0 text-cyan-400" />
+                          {office.whatsapp}
+                        </a>
+                      </li>
+                    )}
+                  </ul>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">

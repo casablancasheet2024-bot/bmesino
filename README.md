@@ -47,8 +47,8 @@ le site n'affiche jamais de coordonnées fictives.
 | Variable | Rôle |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Domaine de production → URLs canoniques, sitemap, robots |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Numéro WhatsApp Business (format international) → bouton mobile, liens contextuels |
-| `NEXT_PUBLIC_CONTACT_EMAIL` / `_PHONE` / `_ADDRESS` | Coordonnées vérifiées (pied de page, contact, mentions légales) |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Surcharge du WhatsApp principal (défaut : bureau Maroc) → bouton mobile, liens contextuels |
+| `NEXT_PUBLIC_CONTACT_EMAIL` / `_PHONE` / `_ADDRESS` | Surcharges optionnelles ; les bureaux (Maroc, Chine, Italie) sont définis dans `offices` (`src/config/site.ts`) |
 | `RESEND_API_KEY`, `CONTACT_FORM_TO`, `CONTACT_FORM_FROM` | Envoi des demandes du formulaire par e-mail via [Resend](https://resend.com) |
 
 ### Formulaires
@@ -67,7 +67,7 @@ Deux formulaires : la demande principale (`src/components/forms/quote-form.tsx`)
 
 ### Éléments encore à fournir par le client
 
-- Coordonnées vérifiées (WhatsApp, e-mail, téléphone, adresse) et domaine de production
+- Domaine de production
 - Informations légales : siège, capital, RC, ICE, IF, directeur de la publication, hébergeur, CNDP, durée de conservation
   (repérées par `[À compléter]` dans `/mentions-legales` et `/politique-de-confidentialite`, pages en `noindex`)
 - Fiches produits réelles et photos (voir ci-dessous)

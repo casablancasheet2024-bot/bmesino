@@ -44,12 +44,48 @@ export const siteConfig = {
   },
 } as const;
 
+/** Offices and direct lines, as supplied by the client (2026-10-31). */
+export const offices = [
+  {
+    code: "MA",
+    name: "Bureau Maroc",
+    role: "Siège",
+    address: "147 Bd La Résistance, Rés. AFA, Étage 1, Appt 16, Dom. chez Nexus, Casablanca, Maroc",
+    phone: "+212 664 404 923",
+    whatsapp: "+212 634 264 577",
+  },
+  {
+    code: "CN",
+    name: "Bureau Chine",
+    role: "Sourcing & contrôle qualité",
+    address:
+      "Salle 1F020-045, Parking Jin Fuyuan, n° 680, route Chouzhou Nord, Yiwu, ville de Jinhua, province du Zhejiang, Chine",
+    phone: "+86 139 5749 3838",
+    whatsapp: "+86 130 4071 9060",
+  },
+  {
+    code: "IT",
+    name: "Italie",
+    role: "Contact Europe",
+    phone: "+39 353 336 6983",
+  },
+] as const satisfies readonly {
+  code: string;
+  name: string;
+  role: string;
+  address?: string;
+  phone?: string;
+  whatsapp?: string;
+}[];
+
+const headOffice = offices[0];
+
 export const contactConfig = {
-  /** Verified address supplied by the client; the env var can still override it. */
+  /** Verified details supplied by the client (head office); env vars can still override them. */
   email: clean(process.env.NEXT_PUBLIC_CONTACT_EMAIL) ?? "contact@bmesino.com",
-  phone: clean(process.env.NEXT_PUBLIC_CONTACT_PHONE),
-  whatsapp: digitsOnly(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER),
-  address: clean(process.env.NEXT_PUBLIC_CONTACT_ADDRESS),
+  phone: clean(process.env.NEXT_PUBLIC_CONTACT_PHONE) ?? headOffice.phone,
+  whatsapp: digitsOnly(clean(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER) ?? headOffice.whatsapp),
+  address: clean(process.env.NEXT_PUBLIC_CONTACT_ADDRESS) ?? headOffice.address,
 } as const;
 
 export const markets = [

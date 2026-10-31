@@ -2,9 +2,7 @@ import { contactConfig } from "@/config/site";
 
 /** https://wa.me/<digits>?text=<encoded> — returns undefined when no number is configured. */
 export function whatsappUrl(message?: string): string | undefined {
-  if (!contactConfig.whatsapp) return undefined;
-  const base = `https://wa.me/${contactConfig.whatsapp}`;
-  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+  return contactConfig.whatsapp ? whatsappUrlFor(contactConfig.whatsapp, message) : undefined;
 }
 
 export function mailtoUrl(subject?: string, body?: string): string | undefined {
@@ -17,8 +15,14 @@ export function mailtoUrl(subject?: string, body?: string): string | undefined {
   return `mailto:${contactConfig.email}${query ? `?${query}` : ""}`;
 }
 
-export function telUrl(): string | undefined {
-  return contactConfig.phone ? `tel:${contactConfig.phone.replace(/[^\d+]/g, "")}` : undefined;
+export function telUrl(phone: string | undefined = contactConfig.phone): string | undefined {
+  return phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : undefined;
+}
+
+/** wa.me link for any displayed number (e.g. an office line). */
+export function whatsappUrlFor(number: string, message?: string): string {
+  const base = `https://wa.me/${number.replace(/\D/g, "")}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 
 export function whatsappMessageFor(subject: string): string {
